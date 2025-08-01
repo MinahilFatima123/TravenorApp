@@ -1,0 +1,160 @@
+import 'package:flutter/material.dart';
+import '../models/homescreen_model.dart';
+import '../widgets/custom_appbar.dart';
+//import '../data/homescreen_data.dart';
+
+class DetailsScreen extends StatelessWidget {
+  final Destination destination;
+
+  const DetailsScreen({super.key, required this.destination});
+
+  @override
+  Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: CustomAppBar(
+        title: 'Details',
+        titleColor: Colors.white,
+        iconColor: Colors.white,
+        ellipseColor: const Color(0x33000000),
+        trailing: Container(
+          width: screenWidth * 0.0907,
+          height: screenWidth * 0.0907,
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            color: Color(0x33000000),
+          ),
+          child: const Icon(
+            Icons.bookmark_border,
+            size: 20,
+            color: Colors.white,
+          ),
+        ),
+      ),
+      body: Column(
+        children: [
+          SizedBox(
+            height: screenHeight * 0.43,
+            width: double.infinity,
+            child: Image.asset(destination.imagePath, fit: BoxFit.cover),
+          ),
+          Transform.translate(
+            offset: Offset(0, -screenHeight * 0.03),
+            child: Container(
+              width: screenWidth,
+              padding: EdgeInsets.all(screenWidth * 0.0533),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(32),
+                  topRight: Radius.circular(32),
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: screenHeight * 0.0197),
+                    child: Center(
+                      child: Image.asset(
+                        'assets/png/bar_details.png',
+                        width: screenWidth * 0.096,
+                        height: screenHeight * 0.0049,
+
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(height: screenHeight * 0.0296),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            destination.name,
+                            style: Theme.of(
+                              context,
+                            ).textTheme.displaySmall!.copyWith(fontSize: 24),
+                          ),
+
+                          SizedBox(height: screenHeight * 0.005),
+                          Text(
+                            destination.location,
+                            style: Theme.of(context).textTheme.labelSmall!
+                                .copyWith(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 15,
+                                  color: Colors.grey[600],
+                                ),
+                          ),
+                        ],
+                      ),
+
+                      CircleAvatar(
+                        radius: screenWidth * 0.08,
+                        backgroundImage: AssetImage(
+                          'assets/png/profile_detail.png',
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: screenHeight * 0.0296),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.location_on,
+                        size: 16,
+                        color: Color(0xff7D848D),
+                      ),
+                      SizedBox(width: screenWidth * (4 / 375)),
+                      Text(
+                        destination.location.split(',')[0],
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          fontSize: 15,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+
+                      SizedBox(width: screenWidth * 0.12),
+                      Row(
+                        children: [
+                          Icon(Icons.star, size: 16, color: Colors.amber),
+                          SizedBox(width: screenWidth * 0.0106),
+                          Text(
+                            destination.rating.toStringAsFixed(1),
+                            style: Theme.of(context).textTheme.labelSmall
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 15,
+                                ),
+                          ),
+                          Text(
+                            destination.totalReviews.toStringAsFixed(1),
+                            style: Theme.of(context).textTheme.labelSmall!
+                                .copyWith(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 15,
+                                  color: Colors.grey[600],
+                                ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

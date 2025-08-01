@@ -1,0 +1,46 @@
+name: travelapp
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  onboarding: ^4.0.2
+  flutter_otp_text_field: ^1.1.0+2
+  carousel_slider: ^5.1.1
+  flutter_custom_clippers: ^2.1.0
+  flutter_staggered_grid_view: ^0.7.0
+  
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+ 
+
+
+flutter:
+  uses-material-design: true
+
+  fonts:
+    - family: Geometr415
+      fonts:
+        - asset: assets/fonts/Geometr415.ttf
+
+    - family: Gilsans
+      fonts:
+        - asset: assets/fonts/gilsans.ttf
+
+    - family: SFUI
+      fonts:
+        - asset: assets/fonts/sfui.ttf
+
+  assets:
+    - assets/png/
