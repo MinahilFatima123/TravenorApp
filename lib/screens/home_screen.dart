@@ -7,14 +7,8 @@ import '../widgets/custom_bottom_navbar.dart';
 import '../screens/details_screen.dart';
 import '../screens/view_all_acreen.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
   final _selectedIndex = 0;
 
   @override

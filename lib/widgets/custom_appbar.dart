@@ -39,8 +39,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 children: [
                   Image.asset(
                     'assets/png/Ellipse 674.png',
-                    width: 34,
-                    height: 34,
+                    width: 44,
+                    height: 44,
                     color: ellipseColor ?? Colors.grey.shade200,
                   ),
                   GestureDetector(
@@ -55,7 +55,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ],
               ),
 
-              const SizedBox(width: 12),
+              const SizedBox(width: 11),
 
               // Title
               Expanded(
@@ -71,7 +71,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ),
 
-              if (trailing != null) trailing!,
+              trailing ?? const SizedBox(width: 44),
             ],
           ),
         ),

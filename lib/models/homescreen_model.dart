@@ -6,6 +6,8 @@ class Destination {
   final List<String> visitors;
   final double pricePerPerson;
   final int totalReviews;
+  final List<String> pictures;
+  final String about;
 
   Destination({
     required this.imagePath,
@@ -15,5 +17,7 @@ class Destination {
     required this.visitors,
     required this.pricePerPerson,
     required this.totalReviews,
+    required this.pictures,
+    required this.about,
   });
 }

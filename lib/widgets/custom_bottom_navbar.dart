@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:travelapp/screens/schedule_screen.dart';
+import 'package:travelapp/screens/search_screen.dart';
 //import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import '../screens/home_screen.dart';
-import '../screens/calendar_screen.dart';
+//import '../screens/popular_places.dart';
+//import '../models/homescreen_model.dart';
 import '../screens/profile_screen.dart';
 import '../screens/messages_screen.dart';
 
@@ -56,7 +59,7 @@ class CustomBottomNavBar extends StatelessWidget {
                     index: 1,
                     screenWidth: screenWidth,
                     screenHeight: screenHeight,
-                    screen: const CalendarScreen(),
+                    screen: const ScheduleScreen(),
                   ),
                   SizedBox(width: screenWidth * 0.1493),
                   _buildNavItem(
@@ -84,7 +87,12 @@ class CustomBottomNavBar extends StatelessWidget {
           Positioned(
             top: screenHeight * 0.0209,
             child: FloatingActionButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => SearchScreen()),
+                );
+              },
               backgroundColor: Theme.of(context).colorScheme.primary,
               shape: const CircleBorder(),
               elevation: 4,

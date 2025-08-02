@@ -11,9 +11,20 @@ final List<Destination> destinations = [
       'assets/png/image2_messages.png',
       'assets/png/image3_messages.png',
       'assets/png/image4_messages.png',
+      'assets/png/image3_messages.png',
     ],
     pricePerPerson: 59.0,
     totalReviews: 2498,
+    pictures: [
+      'assets/png/image1_home.png',
+      'assets/png/image1_home.png',
+      'assets/png/image1_home.png',
+      'assets/png/image1_home.png',
+      'assets/png/image1_home.png',
+      'assets/png/image1_home.png',
+    ],
+    about:
+        'You will get a complete travel package on the beaches. Packages in the form of airline tickets, recommended Hotel rooms, Transportation, Have you ever been on holiday to the Greek ETC',
   ),
   Destination(
     imagePath: 'assets/png/image1_package.png',
@@ -26,10 +37,19 @@ final List<Destination> destinations = [
       'assets/png/image3_messages.png',
       'assets/png/image4_messages.png',
       'assets/png/image3_messages.png',
-      'assets/png/image4_messages.png',
     ],
     pricePerPerson: 120.0,
     totalReviews: 2498,
+    pictures: [
+      'assets/png/image1_home.png',
+      'assets/png/image1_home.png',
+      'assets/png/image1_home.png',
+      'assets/png/image1_home.png',
+      'assets/png/image1_home.png',
+      'assets/png/image1_home.png',
+    ],
+    about:
+        'You will get a complete travel package on the beaches. Packages in the form of airline tickets, recommended Hotel rooms, Transportation, Have you ever been on holiday to the Greek ETC',
   ),
   Destination(
     imagePath: 'assets/png/image2_package.png',
@@ -45,6 +65,9 @@ final List<Destination> destinations = [
     ],
     pricePerPerson: 120.0,
     totalReviews: 2498,
+    pictures: ['assets/png/image1_home.png', 'assets/png/image1_home.png'],
+    about:
+        'You will get a complete travel package on the beaches. Packages in the form of airline tickets, recommended Hotel rooms, Transportation, Have you ever been on holiday to the Greek ETC',
   ),
   Destination(
     imagePath: 'assets/png/image3_package.png',
@@ -59,6 +82,9 @@ final List<Destination> destinations = [
     ],
     pricePerPerson: 120.0,
     totalReviews: 2498,
+    pictures: ['assets/png/image1_home.png', 'assets/png/image1_home.png'],
+    about:
+        'You will get a complete travel package on the beaches. Packages in the form of airline tickets, recommended Hotel rooms, Transportation, Have you ever been on holiday to the Greek ETC',
   ),
   Destination(
     imagePath: 'assets/png/image4_package.png',
@@ -73,5 +99,8 @@ final List<Destination> destinations = [
     ],
     pricePerPerson: 120.0,
     totalReviews: 2498,
+    pictures: ['assets/png/image1_home.png', 'assets/png/image1_home.png'],
+    about:
+        'You will get a complete travel package on the beaches. Packages in the form of airline tickets, recommended Hotel rooms, Transportation, Have you ever been on holiday to the Greek ETC',
   ),
 ];
