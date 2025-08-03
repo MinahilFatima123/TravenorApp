@@ -40,6 +40,7 @@ class PopularPlaces extends StatelessWidget {
 
                   return PopularPlaceCard(
                     destination: destinations[index],
+                    showRating: true,
                     onTap: () {
                       Navigator.push(
                         context,

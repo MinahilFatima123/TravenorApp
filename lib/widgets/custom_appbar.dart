@@ -43,9 +43,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     height: 44,
                     color: ellipseColor ?? Colors.grey.shade200,
                   ),
-                  GestureDetector(
-                    onTap: onBackTap ?? () => Navigator.pop(context),
-                    child: Image.asset(
+                  IconButton(
+                    onPressed: onBackTap ?? () => Navigator.pop(context),
+                    icon: Image.asset(
                       'assets/png/icon arrow left.png',
                       width: 5.5,
                       height: 11.5,

@@ -35,7 +35,7 @@ class CustomTextFormField extends StatelessWidget {
         hintText: hintText,
         fillColor: Colors.grey.shade100,
         filled: true,
-
+        prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,

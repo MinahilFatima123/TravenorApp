@@ -4,7 +4,13 @@ import '../models/homescreen_model.dart';
 class PopularPlaceCard extends StatelessWidget {
   final Destination destination;
   final VoidCallback? onTap;
-  const PopularPlaceCard({super.key, required this.destination, this.onTap});
+  final bool showRating;
+  const PopularPlaceCard({
+    super.key,
+    required this.destination,
+    this.onTap,
+    this.showRating = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -97,23 +103,25 @@ class PopularPlaceCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: screenHeight * 0.0074),
 
-                Row(
-                  children: [
-                    const Icon(Icons.star, color: Colors.amber, size: 13),
-                    const Icon(Icons.star, color: Colors.amber, size: 13),
-                    const Icon(Icons.star, color: Colors.amber, size: 13),
-                    SizedBox(width: screenWidth * 0.0107),
-                    Text(
-                      destination.rating.toString(),
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
+                if (showRating) ...[
+                  SizedBox(height: screenHeight * 0.0074),
+                  Row(
+                    children: [
+                      const Icon(Icons.star, color: Colors.amber, size: 13),
+                      const Icon(Icons.star, color: Colors.amber, size: 13),
+                      const Icon(Icons.star, color: Colors.amber, size: 13),
+                      SizedBox(width: screenWidth * 0.0107),
+                      Text(
+                        destination.rating.toString(),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
+                ],
 
                 SizedBox(height: screenHeight * 0.01108),
 
@@ -124,7 +132,7 @@ class PopularPlaceCard extends StatelessWidget {
                         text:
                             '\$${destination.pricePerPerson.toStringAsFixed(0)}',
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          fontWeight: FontWeight.w400,
+                          fontWeight: FontWeight.w600,
                           fontSize: 12,
                           color: Theme.of(context).primaryColor,
                         ),
@@ -132,7 +140,6 @@ class PopularPlaceCard extends StatelessWidget {
                       TextSpan(
                         text: ' / Person',
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          fontWeight: FontWeight.w400,
                           fontSize: 12,
                           color: Colors.grey[600],
                         ),

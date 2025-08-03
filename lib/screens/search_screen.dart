@@ -3,6 +3,7 @@ import 'package:travelapp/screens/popular_package_screen.dart';
 import '../screens/popular_places.dart';
 import '../screens/favorite_screen.dart';
 import '../data/homescreen_data.dart';
+import '../screens/searching_screen.dart';
 
 class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});
@@ -61,7 +62,17 @@ class SearchScreen extends StatelessWidget {
               },
               child: const Text('Favorites'),
             ),
+
             // Optional: Show a few horizontal popular items preview here (carousel or cards)
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => SearchingScreen()),
+                );
+              },
+              child: const Text('Search Screen'),
+            ),
           ],
         ),
       ),

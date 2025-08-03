@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../screens/edit_screen.dart';
 import 'package:travelapp/widgets/custom_appbar.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -7,39 +8,44 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    //final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       appBar: CustomAppBar(
         title: 'Profile',
-        trailing: Stack(
-          alignment: Alignment.center,
-          children: [
-            Image.asset(
-              'assets/png/Ellipse 674.png',
-              width: 44,
-              height: 44,
-              color: Colors.grey.shade100,
-            ),
-            GestureDetector(
-              onTap: () {},
-              child: Image.asset('assets/png/Edit.png', width: 24, height: 24),
-            ),
-          ],
+        trailing: GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const EditProfileScreen(),
+              ),
+            );
+          },
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Image.asset(
+                'assets/png/Ellipse 674.png',
+                width: 44,
+                height: 44,
+                color: Colors.grey.shade100,
+              ),
+              Image.asset('assets/png/Edit.png', width: 24, height: 24),
+            ],
+          ),
         ),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Center(
               child: CircleAvatar(
                 radius: 48,
                 backgroundImage: AssetImage('assets/png/profile_image.png'),
-                backgroundColor: Colors.transparent,
               ),
             ),
+
             SizedBox(height: screenHeight * 0.0099),
             Text(
               'Leonardo',

@@ -6,6 +6,7 @@ import '../data/homescreen_data.dart';
 import '../widgets/custom_bottom_navbar.dart';
 import '../screens/details_screen.dart';
 import '../screens/view_all_acreen.dart';
+import '../screens/notification_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -49,7 +50,16 @@ class HomeScreen extends StatelessWidget {
                           color: Colors.grey.shade100,
                         ),
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const NotificationScreen(),
+                              ),
+                            );
+                          },
+
                           child: Image.asset(
                             'assets/png/Notifications.png',
                             width: screenWidth * 0.064,
