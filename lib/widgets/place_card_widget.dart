@@ -1,11 +1,62 @@
 import 'package:flutter/material.dart';
 import '../models/homescreen_model.dart';
 import '../widgets/stacked_profile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class PlaceCard extends StatelessWidget {
+
+
+class PlaceCard extends StatefulWidget {
   final Destination destination;
   final VoidCallback? onTap;
-  const PlaceCard({super.key, required this.destination, this.onTap});
+
+  const PlaceCard({
+    super.key,
+    required this.destination,
+    this.onTap,
+  });
+
+  @override
+  State<PlaceCard> createState() => _PlaceCardState();
+}
+
+class _PlaceCardState extends State<PlaceCard> {
+  bool _isBookmarked = false;
+
+  void _toggleBookmark() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> savedList = prefs.getStringList('bookmarked_places') ?? [];
+
+    setState(() {
+      _isBookmarked = !_isBookmarked;
+    });
+
+    if (_isBookmarked) {
+      // Add to saved list
+      savedList.add(widget.destination.name);
+    } else {
+      // Remove from saved list
+      savedList.remove(widget.destination.name);
+    }
+
+    await prefs.setStringList('bookmarked_places', savedList);
+  }
+
+
+  void _loadBookmarkStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> savedList = prefs.getStringList('bookmarked_places') ?? [];
+
+    setState(() {
+      _isBookmarked = savedList.contains(widget.destination.name);
+    });
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    _loadBookmarkStatus();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +64,7 @@ class PlaceCard extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return GestureDetector(
-      onTap: onTap,
+      onTap: widget.onTap,
       child: Card(
         elevation: 8,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
@@ -38,7 +89,7 @@ class PlaceCard extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(16),
                     child: Image.asset(
-                      destination.imagePath,
+                      widget.destination.imagePath,
                       width: screenWidth * 0.64,
                       height: screenHeight * 0.3522,
                       fit: BoxFit.cover,
@@ -54,10 +105,13 @@ class PlaceCard extends StatelessWidget {
                         shape: BoxShape.circle,
                         color: Color(0x33000000),
                       ),
-                      child: const Icon(
-                        Icons.bookmark_border,
-                        size: 20,
-                        color: Colors.white,
+                      child: IconButton(
+                        icon: Icon(
+                          _isBookmarked ? Icons.bookmark : Icons.bookmark_border,
+                          color: Colors.white,
+                          size: 18,
+                        ),
+                        onPressed: _toggleBookmark,
                       ),
                     ),
                   ),
@@ -69,7 +123,7 @@ class PlaceCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      destination.name,
+                      widget.destination.name,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -81,7 +135,7 @@ class PlaceCard extends StatelessWidget {
                       const Icon(Icons.star, color: Colors.amber, size: 18),
                       SizedBox(width: screenWidth * 0.0107),
                       Text(
-                        destination.rating.toString(),
+                        widget.destination.rating.toString(),
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],
@@ -100,7 +154,7 @@ class PlaceCard extends StatelessWidget {
                   SizedBox(width: screenWidth * 0.0107),
                   Expanded(
                     child: Text(
-                      destination.location,
+                      widget.destination.location,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(
                         context,
@@ -108,7 +162,7 @@ class PlaceCard extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: screenWidth * 0.0133),
-                  StackedProfiles(imagePaths: destination.visitors),
+                  StackedProfiles(imagePaths: widget.destination.visitors),
                 ],
               ),
             ],

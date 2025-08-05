@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 //import 'package:travelapp/models/homescreen_model.dart';
-import '../widgets/placecard_widget.dart';
+import '../widgets/place_card_widget.dart';
 import '../data/homescreen_data.dart';
 
 import '../screens/details_screen.dart';

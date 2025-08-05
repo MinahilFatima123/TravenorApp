@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../models/homescreen_model.dart';
-import '../widgets/placecard_widget.dart';
+import '../widgets/place_card_widget.dart';
 import '../widgets/custom_appbar.dart';
 import '../screens/details_screen.dart';
 

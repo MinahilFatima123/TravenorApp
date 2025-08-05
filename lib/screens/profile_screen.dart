@@ -4,6 +4,8 @@ import 'package:travelapp/widgets/custom_appbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../screens/signin_screen.dart';
 import '../widgets/custom_button.dart';
+import '../screens/bookmark_screen.dart';
+
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
@@ -222,7 +224,12 @@ class ProfileScreen extends StatelessWidget {
                       ).textTheme.displaySmall!.copyWith(fontSize: 16),
                     ),
                     trailing: Icon(Icons.chevron_right, color: Colors.grey),
-                    onTap: () {},
+                    onTap: () {   Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const BookmarkedPlacesScreen(),
+                      ),
+                    );},
                   ),
                   Divider(height: 1, color: Colors.grey[200]),
                   ListTile(

@@ -71,7 +71,7 @@ final List<Destination> destinations = [
   ),
   Destination(
     imagePath: 'assets/png/image3_package.png',
-    name: 'Great Wall',
+    name: 'Forest Park',
     location: 'Beijing, China',
     rating: 4.9,
     visitors: [
@@ -88,7 +88,7 @@ final List<Destination> destinations = [
   ),
   Destination(
     imagePath: 'assets/png/image4_package.png',
-    name: 'Great Wall',
+    name: 'Guilin River',
     location: 'Beijing, China',
     rating: 4.9,
     visitors: [
