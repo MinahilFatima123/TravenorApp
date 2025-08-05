@@ -32,76 +32,69 @@ class _SearchingScreenState extends State<SearchingScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      appBar: CustomAppBar(
-        title: 'Search',
-        trailing: TextButton(
-          onPressed: () {
-            // Handle cancel action
-          },
-          style: TextButton.styleFrom(
-            foregroundColor: Theme.of(context).primaryColor,
-          ),
-          child: const Text(
-            'Cancel',
-            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-          ),
-        ),
-      ),
-      body: Padding(
-        padding: EdgeInsets.only(left: 20, right: 20, top: 30),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SearchPlaces(
-              controller: _controller,
-              onChanged: _search,
-              onSubmitted: _search,
-              showMic: true,
-              hintText: 'Search Places',
-            ),
+      appBar: CustomAppBar(title: 'Search'),
+      body: TapRegion(
+        onTapOutside: (_) => FocusScope.of(context).unfocus(),
+        child: Padding(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 30),
 
-            SizedBox(height: screenHeight * 30 / 812),
-            Text(
-              'Search Places',
-              style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SearchPlaces(
+                controller: _controller,
+                onChanged: _search,
+                onSubmitted: _search,
+                showMic: true,
+                hintText: 'Search Places',
               ),
-            ),
-            SizedBox(height: screenHeight * 16 / 812),
 
-            Expanded(
-              // height: 800,
-              child: MasonryGridView.count(
-                //shrinkWrap: true,
-                crossAxisCount: 2,
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 12,
-                itemCount: _controller.text.isEmpty
-                    ? destinations.length
-                    : filtered.length,
-                itemBuilder: (context, index) {
-                  final item = _controller.text.isEmpty
-                      ? destinations[index]
-                      : filtered[index];
-                  return PopularPlaceCard(
-                    destination: item,
-                    showRating: false,
-
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              DetailsScreen(destination: destinations[index]),
-                        ),
-                      );
-                    },
-                  );
-                },
+              SizedBox(height: screenHeight * 30 / 812),
+              Text(
+                'Search Places',
+                style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
-          ],
+              SizedBox(height: screenHeight * 16 / 812),
+
+              Expanded(
+                // height: 800,
+                child: MasonryGridView.count(
+                  padding: EdgeInsets.only(bottom: 50),
+                  //shrinkWrap: true,
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 16,
+                  crossAxisSpacing: 12,
+                  itemCount: _controller.text.isEmpty
+                      ? destinations.length
+                      : filtered.length,
+                  itemBuilder: (context, index) {
+                    final item = _controller.text.isEmpty
+                        ? destinations[index]
+                        : filtered[index];
+                    return PopularPlaceCard(
+                      destination: item,
+                      showRating: false,
+
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                DetailsScreen(destination: item),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+
+              SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );

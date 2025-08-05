@@ -7,15 +7,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color? titleColor;
   final Color? iconColor;
   final Color? ellipseColor;
+  final String? subtitle;
+  final bool showBackButton;
 
   const CustomAppBar({
     super.key,
     this.title,
+    this.subtitle,
     this.onBackTap,
     this.trailing,
     this.iconColor,
     this.titleColor,
     this.ellipseColor,
+    this.showBackButton = true,
   });
 
   @override
@@ -25,49 +29,62 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return SafeArea(
       child: Padding(
         padding: EdgeInsets.only(
-          top: screenHeight * 0.00985, // 8 / 812
-          left: screenWidth * 0.0533, // 20 / 375
-          right: screenWidth * 0.0533, // 20 / 375
+          top: screenHeight * 0.00985,
+          left: screenWidth * 0.0533,
+          right: screenWidth * 0.0533,
         ),
         child: SizedBox(
           height: 80,
           child: Row(
             children: [
-              // Back Button
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  Image.asset(
-                    'assets/png/Ellipse 674.png',
-                    width: 44,
-                    height: 44,
-                    color: ellipseColor ?? Colors.grey.shade200,
-                  ),
-                  IconButton(
-                    onPressed: onBackTap ?? () => Navigator.pop(context),
-                    icon: Image.asset(
-                      'assets/png/icon arrow left.png',
-                      width: 5.5,
-                      height: 11.5,
-                      color: iconColor ?? Colors.black,
-                    ),
-                  ),
-                ],
-              ),
+              showBackButton
+                  ? Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/png/Ellipse 674.png',
+                          width: 44,
+                          height: 44,
+                          color: ellipseColor ?? Colors.grey.shade200,
+                        ),
+                        IconButton(
+                          onPressed: onBackTap ?? () => Navigator.pop(context),
+                          icon: Image.asset(
+                            'assets/png/icon arrow left.png',
+                            width: 5.5,
+                            height: 11.5,
+                            color: iconColor ?? Colors.black,
+                          ),
+                        ),
+                      ],
+                    )
+                  : const SizedBox(width: 44),
 
               const SizedBox(width: 11),
 
-              // Title
               Expanded(
-                child: Center(
-                  child: Text(
-                    title ?? '',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: titleColor ?? Colors.black,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      title ?? '',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: titleColor ?? Colors.black,
+                      ),
                     ),
-                  ),
+                    if (subtitle != null)
+                      Text(
+                        subtitle!,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.green,
+                        ),
+                      ),
+                  ],
                 ),
               ),
 

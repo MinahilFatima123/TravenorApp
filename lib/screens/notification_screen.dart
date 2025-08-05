@@ -12,25 +12,13 @@ class NotificationScreen extends StatelessWidget {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        appBar: CustomAppBar(
-          title: 'Notification',
-          trailing: TextButton(
-            onPressed: () {},
-            style: TextButton.styleFrom(
-              foregroundColor: Theme.of(context).primaryColor,
-            ),
-            child: const Text(
-              'Clear all',
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-            ),
-          ),
-        ),
+        appBar: CustomAppBar(title: 'Notification'),
         body: Column(
           children: [
             const SizedBox(height: 16),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
-              child: CustomTextTabBar(), // <-- Your custom TabBar
+              child: CustomTextTabBar(),
             ),
             // const Divider(),
             Expanded(
@@ -49,8 +37,7 @@ class NotificationScreen extends StatelessWidget {
                           itemBuilder: (context, index) {
                             return NotificationTile(
                               notification: notificationList[index],
-                            ) // ✅ correct
-                            ;
+                            );
                           },
                           separatorBuilder: (context, index) =>
                               const SizedBox(height: 8),

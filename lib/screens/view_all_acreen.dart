@@ -17,6 +17,7 @@ class ViewAllDestinationsScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.fromLTRB(12, 12, 12, 9),
         child: MasonryGridView.count(
+          padding: EdgeInsets.only(bottom: 50),
           crossAxisCount: 2,
           mainAxisSpacing: 16,
           crossAxisSpacing: 12,

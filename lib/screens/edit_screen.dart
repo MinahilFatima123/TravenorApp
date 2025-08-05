@@ -36,9 +36,7 @@ class _EditScreenState extends State<EditProfileScreen> {
       appBar: CustomAppBar(
         title: 'Edit Profile',
         trailing: TextButton(
-          onPressed: () {
-            // Handle cancel action
-          },
+          onPressed: () {},
           style: TextButton.styleFrom(
             foregroundColor: Theme.of(context).primaryColor,
           ),

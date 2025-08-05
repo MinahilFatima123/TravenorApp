@@ -87,56 +87,60 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           screenWidth * 0.0533,
           screenHeight * 0.0197,
         ),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              Text(
-                'Forgot Password',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontSize: 25,
-                  fontWeight: FontWeight.w600,
+        child: TapRegion(
+          onTapOutside: (_) => FocusScope.of(context).unfocus(),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                Text(
+                  'Forgot Password',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-              SizedBox(height: screenHeight * 0.0148),
-              Text(
-                'Enter your email account to reset your password',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontSize: 16,
-                  color: const Color(0xFF7D848D),
+                SizedBox(height: screenHeight * 0.0148),
+                Text(
+                  'Enter your email account to reset your password',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontSize: 16,
+                    color: const Color(0xFF7D848D),
+                  ),
                 ),
-              ),
-              SizedBox(height: screenHeight * 0.0493),
-              CustomTextFormField(
-                hintText: 'Enter your email',
-                controller: emailController,
-                keyboardType: TextInputType.emailAddress,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
-                  }
-                  if (!RegExp(
-                    r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                  ).hasMatch(value)) {
-                    return 'Enter a valid email';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: screenHeight * 0.0493),
-              SizedBox(
-                width: double.infinity,
-                child: CustomButton(
-                  text: 'Reset Password',
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      showPasswordResetDialog(context);
+                SizedBox(height: screenHeight * 0.0493),
+
+                CustomTextFormField(
+                  hintText: 'Enter your email',
+                  controller: emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your email';
                     }
+                    if (!RegExp(
+                      r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                    ).hasMatch(value)) {
+                      return 'Enter a valid email';
+                    }
+                    return null;
                   },
                 ),
-              ),
-            ],
+                SizedBox(height: screenHeight * 0.0493),
+                SizedBox(
+                  width: double.infinity,
+                  child: CustomButton(
+                    text: 'Reset Password',
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        showPasswordResetDialog(context);
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

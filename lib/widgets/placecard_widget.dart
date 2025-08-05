@@ -21,8 +21,13 @@ class PlaceCard extends StatelessWidget {
         margin: EdgeInsets.zero,
         child: Container(
           width: screenWidth * 0.7147,
-          // height: screenHeight * 0.4726,
-          padding: EdgeInsets.all(screenWidth * 0.0373),
+          // height: 400,
+          padding: EdgeInsets.only(
+            left: screenWidth * 0.0373,
+            right: screenWidth * 0.0373,
+            top: screenWidth * 0.0373,
+            bottom: screenWidth * 0.0373,
+          ),
           color: Colors.white,
           child: Column(
             mainAxisSize: MainAxisSize.min,

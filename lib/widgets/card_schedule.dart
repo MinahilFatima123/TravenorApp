@@ -9,11 +9,7 @@ class ListtileSchedule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return
-    //Padding(
-    //padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-    // child:
-    Card(
+    return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       elevation: 2,
       child: Container(
@@ -86,7 +82,6 @@ class ListtileSchedule extends StatelessWidget {
           ],
         ),
       ),
-      // ),
     );
   }
 }

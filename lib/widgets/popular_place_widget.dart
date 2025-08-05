@@ -29,7 +29,7 @@ class PopularPlaceCard extends StatelessWidget {
           margin: EdgeInsets.zero,
           child: Container(
             width: 161,
-            // height: screenHeight * 0.2936,
+
             padding: EdgeInsets.symmetric(
               horizontal: screenWidth * 0.032,
               vertical: screenHeight * 0.0148,
@@ -46,8 +46,8 @@ class PopularPlaceCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(16),
                       child: Image.asset(
                         destination.imagePath,
-                        width: 137,
-                        height: 124,
+                        width: 137 / 375 * screenWidth,
+                        height: 124 / 812 * screenHeight,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -70,7 +70,7 @@ class PopularPlaceCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: screenHeight * 0.00985), // 8/812
+                SizedBox(height: screenHeight * 0.00985),
 
                 Text(
                   destination.name,

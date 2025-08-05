@@ -40,7 +40,7 @@ class GalleryRowWidget extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(6),
               child: Image.asset(
-                pictures[maxVisible], // 5th image
+                pictures[maxVisible],
                 width: 42,
                 height: 42,
                 fit: BoxFit.cover,

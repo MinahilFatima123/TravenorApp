@@ -1,9 +1,26 @@
 import 'package:flutter/material.dart';
 import '../screens/edit_screen.dart';
 import 'package:travelapp/widgets/custom_appbar.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
+import '../screens/signin_screen.dart';
+import '../widgets/custom_button.dart';
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
+
+
+  Future<void> _logout(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isLoggedIn', false);
+
+
+
+    // Navigate to login screen and remove all previous routes
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => SignInScreen ()),
+          (route) => false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -170,95 +187,104 @@ class ProfileScreen extends StatelessWidget {
             ),
 
             SizedBox(height: screenHeight * 0.0370),
-            Column(
-              children: [
-                ListTile(
-                  leading: SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: Image.asset('assets/png/profile_home.png'),
-                  ),
-                  title: Text(
-                    'Profile',
-                    style: Theme.of(
-                      context,
-                    ).textTheme.displaySmall!.copyWith(fontSize: 16),
-                  ),
-                  trailing: Icon(Icons.chevron_right, color: Colors.grey),
-                  onTap: () {
-                    // Navigate to profile page
-                  },
-                ),
-                Divider(height: 1, color: Colors.grey[200]),
-                ListTile(
-                  leading: SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: Image.asset(
-                      'assets/png/bookmark.png',
-                      color: Colors.grey,
+            Expanded(
+              child: ListView(
+                children: [
+                  ListTile(
+                    leading: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: Image.asset('assets/png/profile_home.png'),
                     ),
+                    title: Text(
+                      'Profile',
+                      style: Theme.of(
+                        context,
+                      ).textTheme.displaySmall!.copyWith(fontSize: 16),
+                    ),
+                    trailing: Icon(Icons.chevron_right, color: Colors.grey),
+                    onTap: () {},
                   ),
-                  title: Text(
-                    'Bookmarked',
-                    style: Theme.of(
-                      context,
-                    ).textTheme.displaySmall!.copyWith(fontSize: 16),
+                  Divider(height: 1, color: Colors.grey[200]),
+                  ListTile(
+                    leading: SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: Image.asset(
+                        'assets/png/bookmark.png',
+                        color: Colors.grey,
+                      ),
+                    ),
+                    title: Text(
+                      'Bookmarked',
+                      style: Theme.of(
+                        context,
+                      ).textTheme.displaySmall!.copyWith(fontSize: 16),
+                    ),
+                    trailing: Icon(Icons.chevron_right, color: Colors.grey),
+                    onTap: () {},
                   ),
-                  trailing: Icon(Icons.chevron_right, color: Colors.grey),
-                  onTap: () {},
-                ),
-                Divider(height: 1, color: Colors.grey[200]),
-                ListTile(
-                  leading: SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: Image.asset('assets/png/trip_profile.png'),
+                  Divider(height: 1, color: Colors.grey[200]),
+                  ListTile(
+                    leading: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: Image.asset('assets/png/trip_profile.png'),
+                    ),
+                    title: Text(
+                      'Previous Trips',
+                      style: Theme.of(
+                        context,
+                      ).textTheme.displaySmall!.copyWith(fontSize: 16),
+                    ),
+                    trailing: Icon(Icons.chevron_right, color: Colors.grey),
+                    onTap: () {},
                   ),
-                  title: Text(
-                    'Previous Trips',
-                    style: Theme.of(
-                      context,
-                    ).textTheme.displaySmall!.copyWith(fontSize: 16),
+                  Divider(height: 1, color: Colors.grey[200]),
+                  ListTile(
+                    leading: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: Image.asset('assets/png/Settings.png'),
+                    ),
+                    title: Text(
+                      'Settings',
+                      style: Theme.of(
+                        context,
+                      ).textTheme.displaySmall!.copyWith(fontSize: 16),
+                    ),
+                    trailing: Icon(Icons.chevron_right, color: Colors.grey),
+                    onTap: () {},
                   ),
-                  trailing: Icon(Icons.chevron_right, color: Colors.grey),
-                  onTap: () {},
-                ),
-                Divider(height: 1, color: Colors.grey[200]),
-                ListTile(
-                  leading: SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: Image.asset('assets/png/Settings.png'),
-                  ),
-                  title: Text(
-                    'Settings',
-                    style: Theme.of(
-                      context,
-                    ).textTheme.displaySmall!.copyWith(fontSize: 16),
-                  ),
-                  trailing: Icon(Icons.chevron_right, color: Colors.grey),
-                  onTap: () {},
-                ),
-                Divider(height: 1, color: Colors.grey[200]),
-                ListTile(
-                  leading: SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: Image.asset('assets/png/Version_profile.png'),
-                  ),
-                  title: Text(
-                    'Version',
-                    style: Theme.of(
-                      context,
-                    ).textTheme.displaySmall!.copyWith(fontSize: 16),
-                  ),
+                  Divider(height: 1, color: Colors.grey[200]),
+                  ListTile(
+                    leading: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: Image.asset('assets/png/Version_profile.png'),
+                    ),
+                    title: Text(
+                      'Version',
+                      style: Theme.of(
+                        context,
+                      ).textTheme.displaySmall!.copyWith(fontSize: 16),
+                    ),
 
-                  trailing: Icon(Icons.chevron_right, color: Colors.grey),
-                  onTap: () {},
-                ),
-                Divider(height: 1, color: Colors.grey[200]),
-              ],
+                    trailing: Icon(Icons.chevron_right, color: Colors.grey),
+                    onTap: () {},
+                  ),
+                  Divider(height: 1, color: Colors.grey[200]),
+                  SizedBox(height:15),
+                  CustomButton(
+                    onPressed: () => _logout(context),
+                    text: 'Logout',
+
+
+                  )
+
+
+                ],
+              ),
             ),
           ],
         ),

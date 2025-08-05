@@ -30,6 +30,7 @@ class PopularPlaces extends StatelessWidget {
             Expanded(
               // height: 800,
               child: MasonryGridView.count(
+                padding: EdgeInsets.only(bottom: 50),
                 //shrinkWrap: true,
                 crossAxisCount: 2,
                 mainAxisSpacing: 16,
@@ -41,6 +42,7 @@ class PopularPlaces extends StatelessWidget {
                   return PopularPlaceCard(
                     destination: destinations[index],
                     showRating: true,
+
                     onTap: () {
                       Navigator.push(
                         context,

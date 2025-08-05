@@ -4,6 +4,7 @@ import '../screens/popular_places.dart';
 import '../screens/favorite_screen.dart';
 import '../data/homescreen_data.dart';
 import '../screens/searching_screen.dart';
+import '../widgets/custom_appbar.dart';
 
 class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});
@@ -11,26 +12,16 @@ class SearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Search Destinations')),
+      appBar: CustomAppBar(title: 'Explore'),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // 🔍 Search Bar
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'Search here...',
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            TextButton(
-              onPressed: () {
+            _buildNavigationButton(
+              context,
+              title: 'Popular Places',
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -38,21 +29,23 @@ class SearchScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: const Text('Popular Places'),
             ),
-
-            TextButton(
-              onPressed: () {
+            const SizedBox(height: 12),
+            _buildNavigationButton(
+              context,
+              title: 'Popular Packages',
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => PopularPackageScreen()),
                 );
               },
-              child: const Text('PopularPageScreen'),
             ),
-
-            TextButton(
-              onPressed: () {
+            const SizedBox(height: 12),
+            _buildNavigationButton(
+              context,
+              title: 'Favorites',
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -60,20 +53,44 @@ class SearchScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: const Text('Favorites'),
             ),
-
-            // Optional: Show a few horizontal popular items preview here (carousel or cards)
-            TextButton(
-              onPressed: () {
+            const SizedBox(height: 12),
+            _buildNavigationButton(
+              context,
+              title: 'Search Destinations',
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => SearchingScreen()),
                 );
               },
-              child: const Text('Search Screen'),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNavigationButton(
+    BuildContext context, {
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return Container(
+      height: 130,
+      decoration: BoxDecoration(
+        color: Theme.of(context).primaryColor,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: TextButton(
+        style: TextButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          foregroundColor: Colors.white,
+        ),
+        onPressed: onTap,
+        child: Text(
+          title,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
         ),
       ),
     );

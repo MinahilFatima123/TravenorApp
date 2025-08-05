@@ -4,7 +4,7 @@ class ChatModel {
   final String lastMessage;
   final String time;
   final bool isTyping;
-  final bool isRead; // single tick vs double tick
+  final bool isRead;
   final bool isDelivered;
   final bool isOnline;
 

@@ -10,32 +10,36 @@ class PopularPackageScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: 'Popular Package'),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.only(left: 20, right: 20, top: 30),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'All Popular Trip Package',
-                style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
+      //  body: SingleChildScrollView(
+      body: Padding(
+        padding: EdgeInsets.only(left: 20, right: 20, top: 30),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'All Popular Trip Package',
+              style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.only(bottom: 50),
+                child: ListView.builder(
+                  itemCount: popularPackageItem.length,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return PopularPackageCard(
+                      popularpackageitem: popularPackageItem[index],
+                    );
+                  },
                 ),
               ),
-              const SizedBox(height: 16),
-              ListView.builder(
-                itemCount: popularPackageItem.length,
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return PopularPackageCard(
-                    popularpackageitem: popularPackageItem[index],
-                  );
-                },
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

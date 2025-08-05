@@ -4,7 +4,10 @@ import '../screens/signin_screen.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import '../widgets/custom_button.dart';
 import 'dart:async';
-import 'package:travelapp/screens/home_screen.dart';
+import '../widgets/custom_snackbar.dart';
+import '../widgets/custom_bottom_navbar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class OtpScreen extends StatefulWidget {
   const OtpScreen({super.key});
@@ -14,7 +17,6 @@ class OtpScreen extends StatefulWidget {
 }
 
 class _OtpScreenState extends State<OtpScreen> {
-  // ignore: unused_field
   String _otpCode = '';
   Duration _duration = const Duration(minutes: 2);
   Timer? _timer;
@@ -77,86 +79,102 @@ class _OtpScreenState extends State<OtpScreen> {
             screenWidth * 0.0533,
             screenHeight * 0.3916,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(height: screenHeight * 0.0493),
-              Text(
-                'OTP Verification',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontSize: 25,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              SizedBox(height: screenHeight * 0.0148),
-              Text(
-                'Please check your email www.uihut@gmail.com to see the verification code',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontSize: 15,
-                  color: const Color(0xFF7D848D),
-                ),
-              ),
-              SizedBox(height: screenHeight * 0.0493),
-              SizedBox(
-                width: double.infinity,
-                child: Text(
-                  'OTP Code',
-                  textAlign: TextAlign.start,
+          child: TapRegion(
+            onTapOutside: (_) => FocusScope.of(context).unfocus(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(height: screenHeight * 0.0493),
+                Text(
+                  'OTP Verification',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontSize: 20,
+                    fontSize: 25,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-              ),
-              SizedBox(height: screenHeight * 0.0197),
-              OtpTextField(
-                numberOfFields: 4,
-                showFieldAsBox: true,
-                fieldWidth: screenWidth * 0.1867,
-                borderRadius: BorderRadius.circular(12),
-                focusedBorderColor: Colors.transparent,
-                enabledBorderColor: Colors.transparent,
-                disabledBorderColor: Colors.transparent,
-                filled: true,
-                fillColor: Colors.grey.shade200,
-                onCodeChanged: (String code) {
-                  _otpCode = code;
-                },
-              ),
-              SizedBox(height: screenHeight * 0.0493),
-              CustomButton(
-                text: 'Verify',
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()),
-                  );
-                },
-              ),
-              SizedBox(height: screenHeight * 0.0197),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Resend code to',
+                SizedBox(height: screenHeight * 0.0148),
+                Text(
+                  'Please check your email www.uihut@gmail.com to see the verification code',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontSize: 15,
+                    color: const Color(0xFF7D848D),
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.0493),
+                SizedBox(
+                  width: double.infinity,
+                  child: Text(
+                    'OTP Code',
                     textAlign: TextAlign.start,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontSize: 14,
-                      color: const Color(0xFF7D848D),
-                    ),
-                  ),
-                  Text(
-                    timerText,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontSize: 14,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontSize: 20,
                       fontWeight: FontWeight.w600,
-                      color: const Color(0xFF7D848D),
                     ),
                   ),
-                ],
-              ),
-            ],
+                ),
+                SizedBox(height: screenHeight * 0.0197),
+                OtpTextField(
+                  numberOfFields: 4,
+                  showFieldAsBox: true,
+                  fieldWidth: screenWidth * 0.1867,
+                  borderRadius: BorderRadius.circular(12),
+                  focusedBorderColor: Colors.transparent,
+                  enabledBorderColor: Colors.transparent,
+                  disabledBorderColor: Colors.transparent,
+                  filled: true,
+                  fillColor: Colors.grey.shade200,
+                  onSubmit: (String code) {
+                    _otpCode = code;
+                  },
+                ),
+                SizedBox(height: screenHeight * 0.0493),
+                CustomButton(
+                  text: 'Verify',
+                  onPressed:()async {
+                    if (_otpCode.length == 4) {
+                      //saves login state
+                      final prefs = await SharedPreferences.getInstance();
+                      await prefs.setBool('isLoggedIn', true);
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BottomNavWrapper(),
+                        ),
+                      );
+                    } else {
+                      CustomSnackbar(context).show(
+                        message: 'Please enter the complete OTP',
+                        backgroundColor: Colors.redAccent,
+                        icon: Icons.warning_amber_rounded,
+                      );
+                    }
+                  },
+                ),
+                SizedBox(height: screenHeight * 0.0197),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Resend code to',
+                      textAlign: TextAlign.start,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontSize: 14,
+                        color: const Color(0xFF7D848D),
+                      ),
+                    ),
+                    Text(
+                      timerText,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFF7D848D),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

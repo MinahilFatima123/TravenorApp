@@ -30,6 +30,7 @@ class FavoritePlaces extends StatelessWidget {
             Expanded(
               // height: 800,
               child: MasonryGridView.count(
+                padding: EdgeInsets.only(bottom: 50),
                 //shrinkWrap: true,
                 crossAxisCount: 2,
                 mainAxisSpacing: 16,

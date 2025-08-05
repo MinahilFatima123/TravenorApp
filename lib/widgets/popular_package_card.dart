@@ -29,8 +29,8 @@ class PopularPackageCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
               child: Image.asset(
                 popularpackageitem.destination.imagePath,
-                width: 95,
-                height: 116,
+                width: screenWidth * 95 / 375,
+                height: screenHeight * 116 / 812,
                 fit: BoxFit.cover,
               ),
             ),
