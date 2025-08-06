@@ -5,6 +5,7 @@ import '../widgets/place_card_widget.dart';
 import '../data/homescreen_data.dart';
 import '../widgets/custom_appbar.dart';
 import '../screens/details_screen.dart';
+import '../constants/key.dart';
 
 class BookmarkedPlacesScreen extends StatefulWidget {
   const BookmarkedPlacesScreen({super.key});
@@ -26,15 +27,15 @@ class _BookmarkedPlacesScreenState extends State<BookmarkedPlacesScreen> {
 
   Future<void> _loadBookmarkedDestinations() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> savedList = prefs.getStringList('bookmarked_places') ?? [];
+    List<String> savedList = prefs.getStringList(StorageKeys.bookmarkedPlaces) ?? [];
 
-    // Filter the destinations list using saved names
     setState(() {
       bookmarkedDestinations = destinations
           .where((place) => savedList.contains(place.name))
           .toList();
     });
   }
+
 
   @override
   Widget build(BuildContext context) {

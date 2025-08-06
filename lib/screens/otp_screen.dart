@@ -132,10 +132,15 @@ class _OtpScreenState extends State<OtpScreen> {
                 CustomButton(
                   text: 'Verify',
                   onPressed:()async {
+
                     if (_otpCode.length == 4) {
                       //saves login state
                       final prefs = await SharedPreferences.getInstance();
                       await prefs.setBool('isLoggedIn', true);
+
+
+
+
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(

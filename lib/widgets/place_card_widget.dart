@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/homescreen_model.dart';
 import '../widgets/stacked_profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../constants/key.dart';
 
 
 
@@ -24,7 +25,7 @@ class _PlaceCardState extends State<PlaceCard> {
 
   void _toggleBookmark() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> savedList = prefs.getStringList('bookmarked_places') ?? [];
+    List<String> savedList = prefs.getStringList(StorageKeys.bookmarkedPlaces ) ?? [];
 
     setState(() {
       _isBookmarked = !_isBookmarked;
@@ -38,13 +39,13 @@ class _PlaceCardState extends State<PlaceCard> {
       savedList.remove(widget.destination.name);
     }
 
-    await prefs.setStringList('bookmarked_places', savedList);
+    await prefs.setStringList(StorageKeys.bookmarkedPlaces , savedList);
   }
 
 
   void _loadBookmarkStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> savedList = prefs.getStringList('bookmarked_places') ?? [];
+    List<String> savedList = prefs.getStringList(StorageKeys.bookmarkedPlaces ) ?? [];
 
     setState(() {
       _isBookmarked = savedList.contains(widget.destination.name);
