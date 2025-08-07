@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "268202724433",
+    "project_id": "travenor-900ef",
+    "storage_bucket": "travenor-900ef.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:268202724433:android:d660df0de031633f7dbc70",
+        "android_client_info": {
+          "package_name": "com.example.travelapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcKsAjNXprd_nKb35Dq6BZEBnRxz7yoF0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

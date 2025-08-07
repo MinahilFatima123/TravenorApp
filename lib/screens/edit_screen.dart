@@ -3,7 +3,8 @@ import 'package:travelapp/widgets/custom_appbar.dart';
 import '../widgets/custom_textformfield.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
   @override
@@ -11,11 +12,35 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditScreenState extends State<EditProfileScreen> {
+  String userName = 'Loading...';
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController locationCntroller = TextEditingController();
   final TextEditingController mobileNoController = TextEditingController();
   File? imageFile;
+
+ @override
+  void initState() {
+    super.initState();
+    fetchUserData();
+  }
+
+
+  Future<void> fetchUserData() async {
+    final User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final uid = user.uid;
+      final doc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+
+      if (doc.exists) {
+        final data = doc.data();
+        setState(() {
+          userName = data?['name'] ?? 'No Name';
+
+        });
+      }
+    }
+  }
 
   Future<void> _pickImage() async {
     final ImagePicker picker = ImagePicker();
@@ -66,7 +91,7 @@ class _EditScreenState extends State<EditProfileScreen> {
               SizedBox(height: screenHeight * 0.0099),
               Center(
                 child: Text(
-                  'Leonardo',
+                  userName,
                   style: Theme.of(
                     context,
                   ).textTheme.displaySmall!.copyWith(fontSize: 24),
@@ -182,30 +207,7 @@ class _EditScreenState extends State<EditProfileScreen> {
                   padding: const EdgeInsets.only(left: 16.0, right: 8.0),
                   child: GestureDetector(
                     onTap: () {
-                      showModalBottomSheet(
-                        context: context,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(16),
-                          ),
-                        ),
-                        builder: (context) => SizedBox(
-                          height: 250,
-                          width: 150,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 10, top: 12),
-                            child: ListView(
-                              children: const [
-                                Text('+88', style: TextStyle(fontSize: 16)),
-                                SizedBox(height: 10),
-                                Text('+99', style: TextStyle(fontSize: 16)),
-                                SizedBox(height: 10),
-                                Text('+101', style: TextStyle(fontSize: 16)),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
+
                     },
 
                     child: Row(

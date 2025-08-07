@@ -6,6 +6,9 @@ import '../widgets/custom_textformfield.dart';
 //import '../widgets/custom_appbar.dart';
 import '../widgets/custom_button.dart';
 import '../screens/signup_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import '../widgets/custom_snackbar.dart';
+
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -129,16 +132,64 @@ class _SignInScreenState extends State<SignInScreen> {
                   width: double.infinity,
                   child: CustomButton(
                     text: 'Sign In',
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => OtpScreen()),
-                        );
+                        try {
+                          // Show loading indicator (optional UX improvement)
+                          showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (_) => const Center(child: CircularProgressIndicator()),
+                          );
+
+                          final UserCredential userCredential =
+                          await FirebaseAuth.instance.signInWithEmailAndPassword(
+                            email: emailController.text.trim(),
+                            password: passwordController.text.trim(),
+                          );
+
+
+
+                          Navigator.of(context).pop();
+
+
+                          log('User logged in: ${userCredential.user?.email}');
+
+
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => const OtpScreen()),
+                          );
+                        } on FirebaseAuthException catch (e) {
+                          Navigator.of(context).pop();
+
+                          String message = '';
+                          if (e.code == 'user-not-found') {
+                            message = 'No user found with this email.';
+                          } else if (e.code == 'wrong-password') {
+                            message = 'Incorrect password.';
+                          } else {
+                            message = 'Authentication failed. ${e.message}';
+                          }
+
+                          CustomSnackbar(context).show(
+                            message: message,
+                            backgroundColor: Colors.red,
+
+                          );
+                        } catch (e) {
+                          Navigator.of(context).pop();
+                          CustomSnackbar(context).show(
+                            message: 'Error!',
+                            backgroundColor: Colors.red,
+
+                          );
+                        }
                       } else {
                         log('Form is invalid');
                       }
                     },
+
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.0492),

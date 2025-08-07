@@ -5,32 +5,120 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../screens/signin_screen.dart';
 import '../widgets/custom_button.dart';
 import '../screens/bookmark_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+
+  String userName = 'Loading...';
+  String email = '';
+  @override
+  void initState() {
+    super.initState();
+    fetchUserData();
+  }
+
+  Future<void> fetchUserData() async {
+    final User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final uid = user.uid;
+      final doc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+
+      if (doc.exists) {
+        final data = doc.data();
+        setState(() {
+          userName = data?['name'] ?? 'No Name';
+          email = data?['email'] ?? 'No Email';
+        });
+      }
+    }
+  }
+
+
+
 
 
   Future<void> _logout(BuildContext context) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isLoggedIn', false);
+    final shouldLogout = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
 
+          content: const Text(
+            'Are you sure you want to log out from your account?',
+            style: TextStyle(fontSize: 16),
+          ),
+          actionsPadding: const EdgeInsets.only(right: 12, bottom: 8),
+          actionsAlignment: MainAxisAlignment.end,
+          actions: [
+            TextButton(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.grey[700],
+              ),
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('No'),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).primaryColor,
 
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text(
+                'Yes',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
 
-    // Navigate to login screen and remove all previous routes
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (_) => SignInScreen ()),
-          (route) => false,
+            ),
+          ],
+        );
+
+      },
     );
+
+    // If user pressed "Yes"
+    if (shouldLogout == true) {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isLoggedIn', false);
+
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => const SignInScreen()),
+            (route) => false,
+      );
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
+
+
+
+
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: CustomAppBar(
         title: 'Profile',
+        showBackButton: false,
         trailing: GestureDetector(
           onTap: () {
             Navigator.push(
@@ -66,16 +154,16 @@ class ProfileScreen extends StatelessWidget {
             ),
 
             SizedBox(height: screenHeight * 0.0099),
-            Text(
-              'Leonardo',
-              style: Theme.of(
-                context,
-              ).textTheme.displaySmall!.copyWith(fontSize: 24),
+
+              Text(
+                userName,
+
+                style: Theme.of(context).textTheme.displaySmall!.copyWith(fontSize: 24),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: screenHeight * 0.0049),
             Text(
-              'Leonardo@gmail.com',
+              email,
               style: Theme.of(context).textTheme.displaySmall!.copyWith(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
@@ -83,6 +171,9 @@ class ProfileScreen extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
+
+
+
             SizedBox(height: screenHeight * 0.0369),
             Container(
               width: 335,

@@ -5,6 +5,13 @@ import '../widgets/custom_textformfield.dart';
 //import '../widgets/custom_appbar.dart';
 import '../widgets/custom_button.dart';
 import '../screens/signin_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import '../widgets/custom_snackbar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+
+
+
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -121,19 +128,80 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   width: double.infinity,
                   child: CustomButton(
                     text: 'Sign Up',
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        log('Form is valid');
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const SignInScreen(),
-                          ),
-                        );
-                      } else {
-                        log('Form is invalid');
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          try {
+                            // Show loading indicator
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (_) => const Center(child: CircularProgressIndicator()),
+                            );
+
+                            // Sign up with Firebase Auth
+                            final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                              email: emailController.text.trim(),
+                              password: passwordController.text.trim(),
+                            );
+
+                            final uid = credential.user!.uid;
+
+                            // Save user details to Firestore
+                            await FirebaseFirestore.instance.collection('users').doc(uid).set({
+                              'name': nameController.text.trim(),
+                              'email': emailController.text.trim(),
+                              'createdAt': FieldValue.serverTimestamp(),
+                            });
+
+
+                            Navigator.of(context).pop();
+
+
+                            CustomSnackbar(context).show(
+                              message: 'Sign-up successful!',
+                              backgroundColor: Colors.green,
+                            );
+
+                          
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => const SignInScreen()),
+                            );
+
+                          } on FirebaseAuthException catch (e) {
+                            Navigator.of(context).pop(); // Remove loader
+
+                            String message = '';
+                            if (e.code == 'email-already-in-use') {
+                              message = 'This email is already in use.';
+                            } else if (e.code == 'invalid-email') {
+                              message = 'This email is invalid.';
+                            } else if (e.code == 'weak-password') {
+                              message = 'The password is too weak.';
+                            } else {
+                              message = 'Authentication failed. ${e.message}';
+                            }
+
+                            CustomSnackbar(context).show(
+                              message: message,
+                              backgroundColor: Colors.red,
+                            );
+
+                          } catch (e) {
+                            Navigator.of(context).pop();
+                            CustomSnackbar(context).show(
+                              message: 'Something went wrong!',
+                              backgroundColor: Colors.red,
+                            );
+                          }
+                        } else {
+                          log('Form is invalid');
+                        }
                       }
-                    },
+
+
+
+
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.0393),
