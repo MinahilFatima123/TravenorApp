@@ -12,7 +12,6 @@ class UserService {
 
     final docSnapshot = await _firestore.collection('users').doc(firebaseUser.uid).get();
     if (!docSnapshot.exists) return;
-
     AppData.fromMap(docSnapshot.data()!);
   }
 }

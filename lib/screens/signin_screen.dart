@@ -6,7 +6,7 @@ import '../widgets/custom_button.dart';
 import '../screens/signup_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../widgets/custom_snackbar.dart';
-import '../services/app_data.dart';
+import '../services/fetch_service.dart';
 import '../screens/phone_number_screen.dart';
 import '../services/google_service.dart';
 import '../widgets/custom_bottom_navbar.dart';

@@ -6,6 +6,7 @@ import '../screens/signin_screen.dart';
 import '../screens/bookmark_screen.dart';
 import '../models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -34,6 +35,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
 
   }
+
+
 
   Future<void> _logout(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
@@ -82,8 +85,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
       },
     );
 
-    // If user pressed "Yes"
+
     if (shouldLogout == true) {
+
+      await FirebaseAuth.instance.signOut();
+
+
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+      await googleSignIn.signOut();
+
+
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('isLoggedIn', false);
 

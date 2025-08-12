@@ -3,7 +3,7 @@ import 'package:travelapp/widgets/custom_appbar.dart';
 import '../widgets/custom_textformfield.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import '../services/app_data.dart';
+import '../services/fetch_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/user_model.dart';
