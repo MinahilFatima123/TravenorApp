@@ -1,13 +1,18 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:travelapp/screens/forgotpassword_screen.dart';
-import 'package:travelapp/screens/otp_screen.dart';
 import '../widgets/custom_textformfield.dart';
-//import '../widgets/custom_appbar.dart';
 import '../widgets/custom_button.dart';
 import '../screens/signup_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../widgets/custom_snackbar.dart';
+import '../services/app_data.dart';
+import '../screens/phone_number_screen.dart';
+import '../services/google_service.dart';
+import '../widgets/custom_bottom_navbar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 
 class SignInScreen extends StatefulWidget {
@@ -22,6 +27,8 @@ class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController passwordController = TextEditingController();
   bool obscureText = true;
   final _formKey = GlobalKey<FormState>();
+  final userService = UserService();
+
 
   @override
   Widget build(BuildContext context) {
@@ -135,12 +142,15 @@ class _SignInScreenState extends State<SignInScreen> {
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         try {
-                          // Show loading indicator (optional UX improvement)
+                          final uid = FirebaseAuth.instance.currentUser?.uid;
+
+                          print('Current user UID: $uid');
                           showDialog(
                             context: context,
                             barrierDismissible: false,
                             builder: (_) => const Center(child: CircularProgressIndicator()),
                           );
+
 
                           final UserCredential userCredential =
                           await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -148,17 +158,31 @@ class _SignInScreenState extends State<SignInScreen> {
                             password: passwordController.text.trim(),
                           );
 
+                          final user = FirebaseAuth.instance.currentUser;
+                          final userDocRef = FirebaseFirestore.instance.collection('users').doc(user!.uid);
+
+                          if (!(await userDocRef.get()).exists) {
+                            await userDocRef.set({
+                              'name': user.displayName ?? '',
+                              'email': user.email ?? '',
+                              'createdAt': FieldValue.serverTimestamp(),
+                            });
+                          }
+
+                          await userService.fetchAndCacheUserData();
+                          final prefs = await SharedPreferences.getInstance();
+                          await prefs.setBool('isLoggedIn', true);
 
 
                           Navigator.of(context).pop();
 
-
                           log('User logged in: ${userCredential.user?.email}');
+
 
 
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (context) => const OtpScreen()),
+                            MaterialPageRoute(builder: (context) => const PhoneNumberInputScreen()),
                           );
                         } on FirebaseAuthException catch (e) {
                           Navigator.of(context).pop();
@@ -175,20 +199,19 @@ class _SignInScreenState extends State<SignInScreen> {
                           CustomSnackbar(context).show(
                             message: message,
                             backgroundColor: Colors.red,
-
                           );
                         } catch (e) {
                           Navigator.of(context).pop();
                           CustomSnackbar(context).show(
                             message: 'Error!',
                             backgroundColor: Colors.red,
-
                           );
                         }
                       } else {
                         log('Form is invalid');
                       }
                     },
+
 
                   ),
                 ),
@@ -240,22 +263,46 @@ class _SignInScreenState extends State<SignInScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Image.asset(
-                        'assets/png/fb_icon.png',
-                        width: screenWidth * 0.1173,
-                        height: screenWidth * 0.1173,
+                      IconButton(
+                        onPressed: () {
+                          // TODO: Handle Facebook login
+                        },
+                        icon: Image.asset(
+                          'assets/png/fb_icon.png',
+                          width: screenWidth * 0.1173,
+                          height: screenWidth * 0.1173,
+                        ),
                       ),
-                      Image.asset(
-                        'assets/png/insta_icon.png',
-                        width: screenWidth * 0.1173,
-                        height: screenWidth * 0.1173,
+                      IconButton(
+                        onPressed: () async {
+                          final userCredential = await signInWithGoogle(context);
+                          if (userCredential != null) {
+                            await userService.fetchAndCacheUserData();
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => BottomNavWrapper()),
+                            );
+                          }
+                        },
+                        icon: Image.asset(
+                          'assets/png/google.png',
+                          width: screenWidth * 0.1173,
+                          height: screenWidth * 0.1173,
+                        ),
                       ),
-                      Image.asset(
-                        'assets/png/twitter_icon.png',
-                        width: screenWidth * 0.1173,
-                        height: screenWidth * 0.1173,
+                      IconButton(
+                        onPressed: () {
+
+                        },
+
+                        icon: Image.asset(
+                          'assets/png/insta_icon.png',
+                          width: screenWidth * 0.1173,
+                          height: screenWidth * 0.1173,
+                        ),
                       ),
                     ],
+
                   ),
                 ),
               ],

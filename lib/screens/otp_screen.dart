@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import '../widgets/custom_appbar.dart';
-import '../screens/signin_screen.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import '../widgets/custom_button.dart';
 import 'dart:async';
 import '../widgets/custom_snackbar.dart';
 import '../widgets/custom_bottom_navbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-
+import 'package:firebase_auth/firebase_auth.dart';
+import '../screens/phone_number_screen.dart';
 class OtpScreen extends StatefulWidget {
-  const OtpScreen({super.key});
+  final String verificationId;
+
+  const OtpScreen({Key? key, required this.verificationId}) : super(key: key);
 
   @override
   State<OtpScreen> createState() => _OtpScreenState();
@@ -20,6 +21,7 @@ class _OtpScreenState extends State<OtpScreen> {
   String _otpCode = '';
   Duration _duration = const Duration(minutes: 2);
   Timer? _timer;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -46,15 +48,61 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   String get timerText {
-    final minutes = _duration.inMinutes
-        .remainder(60)
-        .toString()
-        .padLeft(2, '0');
-    final seconds = _duration.inSeconds
-        .remainder(60)
-        .toString()
-        .padLeft(2, '0');
+    final minutes = _duration.inMinutes.remainder(60).toString().padLeft(2, '0');
+    final seconds = _duration.inSeconds.remainder(60).toString().padLeft(2, '0');
     return '$minutes:$seconds';
+  }
+
+  Future<void> _verifyOtp() async {
+    if (_otpCode.length != 6) {
+      CustomSnackbar(context).show(
+        message: 'Please enter the complete 6-digit OTP',
+        backgroundColor: Colors.redAccent,
+        icon: Icons.warning_amber_rounded,
+      );
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+
+      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: widget.verificationId,
+        smsCode: _otpCode,
+      );
+
+
+      final currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        await currentUser.linkWithCredential(credential);
+      }
+
+
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isLoggedIn', true);
+
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => BottomNavWrapper(),
+        ),
+      );
+    } on FirebaseAuthException catch (e) {
+      CustomSnackbar(context).show(
+        message: e.message ?? 'Failed to verify OTP',
+        backgroundColor: Colors.redAccent,
+        icon: Icons.error_outline,
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -67,7 +115,7 @@ class _OtpScreenState extends State<OtpScreen> {
         onBackTap: () {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (_) => const SignInScreen()),
+            MaterialPageRoute(builder: (_) => PhoneNumberInputScreen()),
           );
         },
       ),
@@ -79,8 +127,8 @@ class _OtpScreenState extends State<OtpScreen> {
             screenWidth * 0.0533,
             screenHeight * 0.3916,
           ),
-          child: TapRegion(
-            onTapOutside: (_) => FocusScope.of(context).unfocus(),
+          child: GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -94,7 +142,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 ),
                 SizedBox(height: screenHeight * 0.0148),
                 Text(
-                  'Please check your email www.uihut@gmail.com to see the verification code',
+                  'Please check your phone for the verification code',
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontSize: 15,
@@ -115,9 +163,9 @@ class _OtpScreenState extends State<OtpScreen> {
                 ),
                 SizedBox(height: screenHeight * 0.0197),
                 OtpTextField(
-                  numberOfFields: 4,
+                  numberOfFields: 6,
                   showFieldAsBox: true,
-                  fieldWidth: screenWidth * 0.1867,
+                  fieldWidth: 40,
                   borderRadius: BorderRadius.circular(12),
                   focusedBorderColor: Colors.transparent,
                   enabledBorderColor: Colors.transparent,
@@ -125,36 +173,18 @@ class _OtpScreenState extends State<OtpScreen> {
                   filled: true,
                   fillColor: Colors.grey.shade200,
                   onSubmit: (String code) {
-                    _otpCode = code;
+                    setState(() {
+                      _otpCode = code;
+                    });
+
                   },
                 ),
                 SizedBox(height: screenHeight * 0.0493),
-                CustomButton(
+                _isLoading
+                    ? const CircularProgressIndicator()
+                    : CustomButton(
                   text: 'Verify',
-                  onPressed:()async {
-
-                    if (_otpCode.length == 4) {
-                      //saves login state
-                      final prefs = await SharedPreferences.getInstance();
-                      await prefs.setBool('isLoggedIn', true);
-
-
-
-
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BottomNavWrapper(),
-                        ),
-                      );
-                    } else {
-                      CustomSnackbar(context).show(
-                        message: 'Please enter the complete OTP',
-                        backgroundColor: Colors.redAccent,
-                        icon: Icons.warning_amber_rounded,
-                      );
-                    }
-                  },
+                  onPressed: _verifyOtp,
                 ),
                 SizedBox(height: screenHeight * 0.0197),
                 Row(

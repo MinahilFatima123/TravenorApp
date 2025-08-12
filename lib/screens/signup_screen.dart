@@ -131,14 +131,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           try {
-                            // Show loading indicator
+
                             showDialog(
                               context: context,
                               barrierDismissible: false,
                               builder: (_) => const Center(child: CircularProgressIndicator()),
                             );
 
-                            // Sign up with Firebase Auth
+
                             final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
                               email: emailController.text.trim(),
                               password: passwordController.text.trim(),
@@ -146,12 +146,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                             final uid = credential.user!.uid;
 
-                            // Save user details to Firestore
+
                             await FirebaseFirestore.instance.collection('users').doc(uid).set({
                               'name': nameController.text.trim(),
                               'email': emailController.text.trim(),
+                               'firstName': '',
+                               'lastName': '',
+                               'location': '',
+                               'mobileNo': '',
                               'createdAt': FieldValue.serverTimestamp(),
                             });
+
+
 
 
                             Navigator.of(context).pop();
@@ -162,7 +168,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               backgroundColor: Colors.green,
                             );
 
-                          
+                            print('Current user UID: $uid');
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(builder: (context) => const SignInScreen()),

@@ -9,6 +9,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color? ellipseColor;
   final String? subtitle;
   final bool showBackButton;
+  final List<Widget>? actions;
+
 
   const CustomAppBar({
     super.key,
@@ -20,6 +22,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.titleColor,
     this.ellipseColor,
     this.showBackButton = true,
+    this.actions,
   });
 
   @override
@@ -88,7 +91,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ),
 
-              trailing ?? const SizedBox(width: 44),
+              actions != null && actions!.isNotEmpty
+                  ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: actions!,
+              )
+                  : const SizedBox(width: 44),
+
             ],
           ),
         ),

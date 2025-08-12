@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../screens/onboarding_screen.dart';
 import '../widgets/custom_bottom_navbar.dart';
+import '../services/app_data.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import '../models/user_model.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -12,6 +15,8 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final userService = UserService();
+
   @override
   void initState() {
     super.initState();
@@ -23,15 +28,25 @@ class _SplashScreenState extends State<SplashScreen> {
     final prefs = await SharedPreferences.getInstance();
     final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
 
-    if (!mounted) return; // avoid context issues
+    if (!mounted) return;
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-        isLoggedIn ? const BottomNavWrapper() : const OnboardingScreen(),
-      ),
-    );
+    if (isLoggedIn) {
+      final currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        await userService.fetchAndCacheUserData();
+      }
+
+      if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const BottomNavWrapper()),
+      );
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const OnboardingScreen()),
+      );
+    }
   }
 
   @override

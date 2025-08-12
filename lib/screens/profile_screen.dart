@@ -3,10 +3,9 @@ import '../screens/edit_screen.dart';
 import 'package:travelapp/widgets/custom_appbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../screens/signin_screen.dart';
-import '../widgets/custom_button.dart';
 import '../screens/bookmark_screen.dart';
+import '../models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -15,37 +14,31 @@ class ProfileScreen extends StatefulWidget {
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
 
-  String userName = 'Loading...';
-  String email = '';
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  String? userName;
+  String? userEmail;
+
+
   @override
   void initState() {
     super.initState();
-    fetchUserData();
-  }
-
-  Future<void> fetchUserData() async {
-    final User? user = FirebaseAuth.instance.currentUser;
+    final user = FirebaseAuth.instance.currentUser;
+    print('Current user UID: $user');
     if (user != null) {
-      final uid = user.uid;
-      final doc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
-
-      if (doc.exists) {
-        final data = doc.data();
-        setState(() {
-          userName = data?['name'] ?? 'No Name';
-          email = data?['email'] ?? 'No Email';
-        });
-      }
+      setState(() {
+        userName = AppData.name ?? '';
+        userEmail = AppData.email ?? '';
+      });
     }
+
   }
-
-
-
-
 
   Future<void> _logout(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
+
+
     final shouldLogout = await showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
@@ -53,7 +46,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-
           content: const Text(
             'Are you sure you want to log out from your account?',
             style: TextStyle(fontSize: 16),
@@ -71,7 +63,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).primaryColor,
-
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -85,11 +76,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   fontSize: 16,
                 ),
               ),
-
             ),
           ],
         );
-
       },
     );
 
@@ -97,6 +86,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (shouldLogout == true) {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('isLoggedIn', false);
+
+
+
 
       Navigator.pushAndRemoveUntil(
         context,
@@ -109,39 +101,57 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-
-
-
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: CustomAppBar(
         title: 'Profile',
         showBackButton: false,
-        trailing: GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const EditProfileScreen(),
-              ),
-            );
-          },
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Image.asset(
-                'assets/png/Ellipse 674.png',
-                width: 44,
-                height: 44,
-                color: Colors.grey.shade100,
-              ),
-              Image.asset('assets/png/Edit.png', width: 24, height: 24),
-            ],
+        actions: [
+          // Existing edit icon
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const EditProfileScreen(),
+                ),
+              );
+            },
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Image.asset(
+                  'assets/png/Ellipse 674.png',
+                  width: 44,
+                  height: 44,
+                  color: Colors.grey.shade100,
+                ),
+                Image.asset('assets/png/Edit.png', width: 24, height: 24),
+              ],
+            ),
           ),
-        ),
+
+          const SizedBox(width: 8), // Space between icons
+
+          // Logout button
+          TextButton(
+            style: TextButton.styleFrom(
+              backgroundColor: Theme.of(context).primaryColor,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
+              ),
+            ),
+            onPressed: () => _logout(context),
+            child: const Text(
+              'Logout',
+              style: TextStyle(color: Colors.white, fontSize: 14),
+            ),
+          ),
+        ],
       ),
+
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
         child: Column(
@@ -156,14 +166,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SizedBox(height: screenHeight * 0.0099),
 
               Text(
-                userName,
+                userName ?? '',
 
                 style: Theme.of(context).textTheme.displaySmall!.copyWith(fontSize: 24),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: screenHeight * 0.0049),
             Text(
-              email,
+              userEmail ?? '',
               style: Theme.of(context).textTheme.displaySmall!.copyWith(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
@@ -372,13 +382,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     onTap: () {},
                   ),
                   Divider(height: 1, color: Colors.grey[200]),
-                  SizedBox(height:15),
-                  CustomButton(
-                    onPressed: () => _logout(context),
-                    text: 'Logout',
 
-
-                  )
 
 
                 ],
